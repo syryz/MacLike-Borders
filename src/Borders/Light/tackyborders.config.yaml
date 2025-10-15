@@ -1,0 +1,169 @@
+# watch_config_changes: Automatically reload borders whenever the config file is modified.
+watch_config_changes: True
+enable_logging: False
+rendering_backend: V2
+
+# -------------------------------
+# MacOS border style
+# -------------------------------
+# Global configuration options
+global:
+  border_z_order: AboveWindow
+  follow_native_border: True
+  border_width: 1.2
+  border_offset: -2
+  border_radius: 6
+  #   - Auto: Automatically determine the radius
+  #   - Square: Sharp corners (radius = 0)
+  #   - Round: Fully rounded corners
+  #   - RoundSmall: Slightly rounded corners
+
+  # initialize_delay: Time (in ms) before the border appears after opening a new window
+  # unminimize_delay: Time (in ms) before the border appears after unminimizing a window
+  #
+  # These settings help accommodate window animations (e.g., open or unminimize animations).
+  # Set these to 0 if window animations are disabled.
+  #
+  # These can also be used to accommodate border animations (e.g., fade animations).
+  initialize_delay: 200
+  unminimize_delay: 150
+
+  # active_color: the color of the active window's border
+  # inactive_color: the color of the inactive window's border
+  #
+  # Supported color types:
+  #   - Solid: Use a hex code or "accent"
+  #       Example:
+  #         active_color: "#ffffff"
+  #         OR
+  #         active_color: "accent"
+  #   - Gradient: Define colors and direction
+  #       Example:
+  #         active_color:
+  #           colors: ["#000000", "#ffffff"]
+  #           direction: 45deg
+  #         OR
+  active_color:
+    colors: ["#ffffff00", "#ffffff00"]
+    direction:
+      start: [0.5, 0.0]
+      end: [0.5, 0.1]
+  inactive_color:
+    colors: ["#ffffff00", "#ffffff00"]
+    direction:
+      start: [0.5, 0.0]
+      end: [0.5, 0.1]
+  #       NOTE: [0.0, 0.0] = top-left, [1.0, 1.0] = bottom-right
+  komorebi_colors:
+    stack_color: "#e762b7"
+    monocle_color: "#62e793"
+    floating_color: "#f5f5a5"
+    enabled: False
+
+  animations:
+    active:
+      - type: ReverseSpiral
+        duration: 1800
+        easing: Linear
+
+      - type: Fade
+        duration: 200
+        easing: EaseInOutQuad
+
+    inactive:
+      - type: Spiral
+        duration: 1800
+        easing: Linear
+
+      - type: Fade
+        duration: 200
+        easing: EaseInOutQuad
+
+    fps: 60
+    enabled: False
+
+  # effects: Configure visual effects for window borders
+  #   active: Effects for active windows
+  #   inactive: Effects for inactive windows
+  #
+  # Supported effect types:
+  #   - Shadow
+  #   - Glow
+  #
+  # Specify effect types and parameters as follows:
+  #   active:
+  #    - type: Shadow
+  #      radius: 2.0
+  #      opacity: 1.0
+  #      translation:
+  #        x: 0
+  #        y: 20
+  #
+  #    - type: Glow
+  #      radius: 8.0
+  #      opacity: 1.0
+  #
+  # NOTE: These effects can significantly increase CPU and GPU usage.
+  # Additionally, effects require rendering_backend: V2 to work.
+  effects:
+    active:
+      - type: Shadow
+        radius: 20.0
+        opacity: 1.0
+        translation:
+          x: 0
+          y: 0
+
+      - type: Glow
+        radius: 3.0
+        opacity: 0.0
+
+    inactive:
+      - type: Shadow
+        radius: 20.0
+        opacity: 1.0
+        translation:
+          x: 0
+          y: 0
+
+      - type: Glow
+        radius: 3.0
+        opacity: 0.0
+
+    enabled: true
+
+# Per-application configuration overrides
+window_rules:
+  - match: Class
+    name: "Windows.UI.Core.CoreWindow"
+    enabled: False
+
+  - match: Class
+    name: "XamlExplorerHostIslandWindow"
+    enabled: False
+
+  - match: Process
+    name: "zebar"
+    enabled: False
+
+  - match: Title
+    name: "komorebi-bar"
+    enabled: False
+
+  - match: Title
+    name: "keyviz"
+    enabled: False
+
+  - match: Title
+    name: "Picture-in-Picture"
+    enabled: False
+
+  # Example rule:
+  # - match: Class                   # Match based on Class, Title, or Process
+  #   name: "MozillaWindowClass"     # Class/title/process name to match
+  #   strategy: Equals               # Matching strategy: Equals, Contains, or Regex (default: Equals)
+  #   enabled: True                  # Border enabled: True, False, or Auto (default: Auto)
+  #
+  # Notes:
+  #   - Any option in the global config can also be defined in window_rules.
+  #   - If not defined in a rule, settings will fall back to global config values.
